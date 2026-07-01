@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBOOK Feed</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html">
+            <img class="brand-logo" src="logo.svg" alt="OBOOK logo">
+            <div>
+                <div class="brand-name">OBOOK</div>
+                <div class="brand-tag">CONNECT. SHARE. INSPIRE.</div>
+            </div>
+        </a>
+        <div class="topbar-actions">
+            <a class="ghost-btn" href="index.html">Home</a>
+            <a class="primary-btn" href="index.html">Log in</a>
+        </div>
+    </header>
+
+    <main class="feed-shell">
+        <section class="composer card">
+            <div class="composer-top">
+                <div class="avatar">O</div>
+                <textarea id="oe-text" maxlength="280" placeholder="Write your next Oe..."></textarea>
+            </div>
+            <div class="composer-actions">
+                <label class="upload-btn" for="oe-image">📷 Add photo</label>
+                <input id="oe-image" type="file" accept="image/png,image/jpeg,image/webp">
+                <button id="post-btn" class="primary-btn">Post</button>
+            </div>
+            <p id="composer-error" class="form-error"></p>
+        </section>
+
+        <section id="feed" class="feed-list"></section>
+    </main>
+
+    <script src="feed.js"></script>
+</body>
+</html>

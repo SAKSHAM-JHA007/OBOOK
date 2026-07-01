@@ -1,0 +1,7 @@
+node_modules/
+users.db
+.env
+*.sql
+
+# Keep the schema-only SQL file tracked
+!users.sql

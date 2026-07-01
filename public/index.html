@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBOOK</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="index.html">
+            <img class="brand-logo" src="logo.svg" alt="OBOOK logo">
+            <div>
+                <div class="brand-name">OBOOK</div>
+                <div class="brand-tag">CONNECT. SHARE. INSPIRE.</div>
+            </div>
+        </a>
+        <div class="topbar-actions">
+            <a class="ghost-btn" href="feed.html">Feed</a>
+            <button class="ghost-btn" id="show-login-btn" type="button">Login</button>
+            <a class="primary-btn" href="signup.html">Sign Up</a>
+        </div>
+    </header>
+
+    <main class="center-shell">
+        <section class="hero-card card">
+            <h1>Welcome to OBOOK</h1>
+            <p>Create an account or log in to share your next Oe with friends.</p>
+            <div class="hero-actions">
+                <a class="primary-btn" href="signup.html">Create account</a>
+                <button class="ghost-btn" id="toggle-login" type="button">Log in</button>
+            </div>
+        </section>
+
+        <section class="card auth-card" id="login-panel">
+            <h2>Log in</h2>
+            <form id="login-form" class="stack-form">
+                <label>
+                    <span>Email</span>
+                    <input type="email" id="login-email" name="email" required>
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" id="login-password" name="password" required>
+                </label>
+                <button class="primary-btn" type="submit">Log in</button>
+                <p id="login-error" class="form-error"></p>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const loginPanel = document.getElementById('login-panel');
+        const showLoginBtn = document.getElementById('show-login-btn');
+        const toggleLoginBtn = document.getElementById('toggle-login');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+
+        const showLogin = () => {
+            loginPanel.classList.add('visible');
+            document.getElementById('login-email').focus();
+        };
+
+        const hideLogin = () => {
+            loginPanel.classList.remove('visible');
+        };
+
+        showLoginBtn.addEventListener('click', showLogin);
+        toggleLoginBtn.addEventListener('click', showLogin);
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            loginError.textContent = '';
+
+            const payload = {
+                email: document.getElementById('login-email').value.trim(),
+                password: document.getElementById('login-password').value
+            };
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
+                    loginError.textContent = result.error || 'Invalid email or password';
+                    return;
+                }
+
+                window.location.href = result.redirect || '/feed.html';
+            } catch (error) {
+                loginError.textContent = 'Unable to log in right now.';
+            }
+        });
+
+        if (window.location.hash === '#login') {
+            showLogin();
+        }
+    </script>
+</body>
+</html>
