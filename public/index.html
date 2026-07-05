@@ -1,104 +1,386 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBOOK</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header class="topbar">
-        <a class="brand" href="index.html">
-            <img class="brand-logo" src="logo.svg" alt="OBOOK logo">
-            <div>
-                <div class="brand-name">OBOOK</div>
-                <div class="brand-tag">CONNECT. SHARE. INSPIRE.</div>
-            </div>
-        </a>
-        <div class="topbar-actions">
-            <a class="ghost-btn" href="feed.html">Feed</a>
-            <button class="ghost-btn" id="show-login-btn" type="button">Login</button>
-            <a class="primary-btn" href="signup.html">Sign Up</a>
-        </div>
-    </header>
-
-    <main class="center-shell">
-        <section class="hero-card card">
-            <h1>Welcome to OBOOK</h1>
-            <p>Create an account or log in to share your next Oe with friends.</p>
-            <div class="hero-actions">
-                <a class="primary-btn" href="signup.html">Create account</a>
-                <button class="ghost-btn" id="toggle-login" type="button">Log in</button>
-            </div>
-        </section>
-
-        <section class="card auth-card" id="login-panel">
-            <h2>Log in</h2>
-            <form id="login-form" class="stack-form">
-                <label>
-                    <span>Email</span>
-                    <input type="email" id="login-email" name="email" required>
-                </label>
-                <label>
-                    <span>Password</span>
-                    <input type="password" id="login-password" name="password" required>
-                </label>
-                <button class="primary-btn" type="submit">Log in</button>
-                <p id="login-error" class="form-error"></p>
-            </form>
-        </section>
-    </main>
-
-    <script>
-        const loginPanel = document.getElementById('login-panel');
-        const showLoginBtn = document.getElementById('show-login-btn');
-        const toggleLoginBtn = document.getElementById('toggle-login');
-        const loginForm = document.getElementById('login-form');
-        const loginError = document.getElementById('login-error');
-
-        const showLogin = () => {
-            loginPanel.classList.add('visible');
-            document.getElementById('login-email').focus();
-        };
-
-        const hideLogin = () => {
-            loginPanel.classList.remove('visible');
-        };
-
-        showLoginBtn.addEventListener('click', showLogin);
-        toggleLoginBtn.addEventListener('click', showLogin);
-
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            loginError.textContent = '';
-
-            const payload = {
-                email: document.getElementById('login-email').value.trim(),
-                password: document.getElementById('login-password').value
-            };
-
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-                if (!response.ok) {
-                    loginError.textContent = result.error || 'Invalid email or password';
-                    return;
-                }
-
-                window.location.href = result.redirect || '/feed.html';
-            } catch (error) {
-                loginError.textContent = 'Unable to log in right now.';
-            }
-        });
-
-        if (window.location.hash === '#login') {
-            showLogin();
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>OBOOK - Share Your World</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#5341cd",
+                        "secondary-container": "#a19afd",
+                        "on-secondary-container": "#352c8a",
+                        "primary-fixed-dim": "#c6bfff",
+                        "secondary": "#5952af",
+                        "on-surface-variant": "#474554",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb77d",
+                        "primary-fixed": "#e4dfff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#4029ba",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#140067",
+                        "secondary-fixed-dim": "#c5c0ff",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c8c4d7",
+                        "surface-variant": "#e1e3e4",
+                        "on-tertiary-fixed": "#2f1500",
+                        "on-background": "#191c1d",
+                        "on-primary-container": "#faf6ff",
+                        "tertiary-container": "#ac5d00",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed-variant": "#6e3900",
+                        "tertiary": "#884800",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-tint": "#5847d2",
+                        "on-error": "#ffffff",
+                        "outline": "#787586",
+                        "primary-container": "#6c5ce7",
+                        "on-primary-fixed": "#160066",
+                        "secondary-fixed": "#e3dfff",
+                        "background": "#f8f9fa",
+                        "on-tertiary-container": "#fff5f1",
+                        "surface-container": "#edeeef",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed": "#ffdcc3",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-primary": "#c6bfff",
+                        "on-secondary-fixed-variant": "#413996"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "stack-lg": "24px",
+                        "section-gap": "80px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "1.25", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
         }
     </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glassCard {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .ambientShadow {
+            box-shadow: 0 20px 40px -10px rgba(83, 65, 205, 0.08);
+        }
+        .ambientShadowHover:hover {
+            box-shadow: 0 30px 60px -12px rgba(83, 65, 205, 0.12);
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed-variant">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-gutter h-20">
+<div class="font-headline-md text-headline-md font-bold text-primary tracking-tight">OBOOK</div>
+<div class="flex items-center gap-stack-md">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200 px-4 py-2 rounded-xl" href="index.html">Home</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200 px-4 py-2 rounded-xl" href="feed.html">Feed</a>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200 px-4 py-2 rounded-xl" id="showLoginModal">Login</button>
+<a class="font-label-sm text-label-sm bg-primary-container text-on-primary-container px-6 py-2.5 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md" href="signup.html">Sign Up</a>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative overflow-hidden py-section-gap">
+<!-- Background Decorative Element -->
+<div class="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute top-1/2 -left-24 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter grid grid-cols-1 md:grid-cols-2 gap-stack-lg items-center">
+<div class="space-y-stack-md z-10">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
+Share your world with <span class="text-primary">OBOOK</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+Connect with friends, share your photos and Oes instantly. The minimal social space designed for effortless connectivity.
+</p>
+<div class="flex flex-col sm:flex-row items-center gap-stack-md pt-stack-sm">
+<a class="w-full sm:w-auto font-label-sm text-label-sm bg-primary-container text-on-primary-container px-8 py-4 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-lg text-center" href="signup.html">Get Started</a>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" type="button" id="heroLoginBtn">Already have an account? <span class="font-bold underline decoration-primary/30">Log in</span></button>
+</div>
+</div>
+<!-- Hero Mockup -->
+<div class="relative mt-12 md:mt-0 flex justify-center">
+<div class="glassCard ambientShadow rounded-[32px] p-6 max-w-sm w-full transform rotate-2 hover:rotate-0 transition-transform duration-500">
+<!-- Post Header -->
+<div class="flex items-center gap-stack-sm mb-4">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white">
+<img class="w-full h-full object-cover" alt="Profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYW3_Lr-n2G0efgDGM-pqWh7Ut-5Rgx28OBNd2vhlMvkBoYd6YzsIGBYLoKOBqhOTjxCMtHujZnGHKx2PEIizmkFTzk6HbPal5g3B0bZdIB2bH9YNH8tPxuAlFKMZ1bivFLAIGwxWgP7W-6LDnQpes20GZrKQOax8f2Pq94GjQA5n00BpwcDPrSytmxTDasCdjyGSN8dJGrUeXo2H8v_0GCeXGD6IC5Co5vGMuNLyBgIDDg8dkZcNVU5mF4d-gmjQ6Ahhsi4hz9ULw"/>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface">alexCreatives</div>
+<div class="text-[10px] text-on-surface-variant opacity-60">2 hours ago</div>
+</div>
+<button class="ml-auto text-on-surface-variant" type="button">
+<span class="material-symbols-outlined text-[20px]">more_horiz</span>
+</button>
+</div>
+<!-- Post Content -->
+<div class="rounded-2xl overflow-hidden mb-4 aspect-square">
+<img class="w-full h-full object-cover" alt="Post image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzrTx6PFkmXpQUnJQDbNFv716bpodB8sBL1ls7_3UqTJ8jvxJ80eqVbM2LZsiG_7PfCSjP-wuqSadXZLKbaNq3RqEtwXY1jMpyRftoR2la6Z1P2reIeC8e398Pi4cT1e1X7G_E38kQcuJTaJu6hPf1j9DlIehva1hTzAPTG189YiF7RRgsDOkHSdG8Ew-mATKaH2iecJaZrLmc9qZKNLAT7ks38_YxJGB0U3RlDYcmBtTdYaG_UbkZrMFeme56v7LgGDoQk8z-4ZEo"/>
+</div>
+<!-- Post Actions -->
+<div class="flex items-center gap-4 mb-3">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="material-symbols-outlined text-on-surface-variant text-2xl">chat_bubble</span>
+<span class="material-symbols-outlined text-on-surface-variant text-2xl">send</span>
+<span class="material-symbols-outlined text-on-surface-variant text-2xl ml-auto">bookmark</span>
+</div>
+<div class="font-label-sm text-[12px] text-on-surface mb-1">Liked by 2,402 people</div>
+<p class="font-body-md text-[13px] text-on-surface leading-snug">
+<span class="font-bold">alexCreatives</span> Finding peace in the morning mist. This is my world today. 🌲✨ #nature #obook
+</p>
+</div>
+<!-- Decorative Floating Element -->
+<div class="absolute -bottom-8 -left-8 glassCard ambientShadow p-4 rounded-2xl flex items-center gap-3 animate-bounce">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">bolt</span>
+</div>
+<div class="font-label-sm text-[12px] text-on-surface">New Oes shared!</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-section-gap bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter text-center mb-16">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-4">How OBOOK connects you</h2>
+<div class="w-16 h-1.5 bg-primary rounded-full mx-auto"></div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Feature 1 -->
+<div class="bg-surface p-8 rounded-[24px] ambientShadowHover transition-all duration-300 text-center flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-secondary-container/20 flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-3xl">photo_library</span>
+</div>
+<h3 class="font-headline-md text-[20px] text-on-surface mb-3">Share Photos</h3>
+<p class="font-body-md text-on-surface-variant">Post pictures instantly. Our smart filters and clean layout make your memories look professional.</p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-surface p-8 rounded-[24px] ambientShadowHover transition-all duration-300 text-center flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-secondary-container/20 flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-3xl">edit_note</span>
+</div>
+<h3 class="font-headline-md text-[20px] text-on-surface mb-3">Write Oes</h3>
+<p class="font-body-md text-on-surface-variant">Share quick thoughts, tweet-style. Keep your circle updated with short, meaningful status updates.</p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-surface p-8 rounded-[24px] ambientShadowHover transition-all duration-300 text-center flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-secondary-container/20 flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-3xl">group</span>
+</div>
+<h3 class="font-headline-md text-[20px] text-on-surface mb-3">Connect</h3>
+<p class="font-body-md text-on-surface-variant">Follow friends and see their feed. Stay in the loop with a chronological timeline that respects your time.</p>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-section-gap overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-gutter">
+<div class="bg-primary-container rounded-[40px] p-8 md:p-16 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
+<div class="z-10 text-center md:text-left max-w-xl">
+<h2 class="font-display-lg-mobile md:font-display-lg text-on-primary-container mb-6 leading-tight">Ready to join the community?</h2>
+<p class="font-body-lg text-primary-fixed text-opacity-90 mb-8">OBOOK is where your stories find their home. Simple, beautiful, and focused on what matters: you.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+<a class="bg-white text-primary font-label-sm text-label-sm px-10 py-4 rounded-2xl hover:bg-opacity-90 active:scale-95 transition-all shadow-lg text-center" href="signup.html">Create Account</a>
+<button class="border border-white/30 text-white font-label-sm text-label-sm px-10 py-4 rounded-2xl hover:bg-white/10 transition-all" type="button" id="ctaLoginBtn">Learn More</button>
+</div>
+</div>
+<div class="z-10 grid grid-cols-2 gap-4 w-full md:w-auto">
+<div class="aspect-square w-32 md:w-40 rounded-3xl overflow-hidden rotate-3">
+<img class="w-full h-full object-cover" alt="Gallery image 1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCId5MOyHf2mKNI0sAe6KsCp5Pe-FrYhbs5EZ7Hqz3RiUKDq3R3_Fig7N72QHnF6IrtbxOIw7OWjSNB6lxKMF-mKoBk91nPV1pR73wZCiv0y5VhaEGP4PnHI9lXIpFIW5j8V1os1u6RWPAPt1zVbPW_paSnbVZZQsqiXyhm8qyyMBErY5s4uF1e3sWABY4Hc9GOJ-3iPcXiXFZPzPRoI4gf_VJYz9i40vGdJdw_OgVFwLAdx0gsIhTRYjAAtw8ZzsVhELpS2rGUuBmv"/>
+</div>
+<div class="aspect-square w-32 md:w-40 rounded-3xl overflow-hidden -rotate-6 mt-8">
+<img class="w-full h-full object-cover" alt="Gallery image 2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZj_oZi77GACX9w4u3yO_dBN9I3PnLIUZgC9g_zhni2A6UPU7ffXQFECfiFFT-iUsB8zGqPADMQzLS_EVO-XnLBwkzbOZisJhvwXxvJPfiCv4fB5hSmg1CmUHyAUFFHpBnrIH22Ye3Dbj1rF3vwULc9q1dHX-zJpuPPnZl0ZSg3HFFObFQilPEE1kX89NLlNvX7_hf8cLnE-jLp9hG_xg5nMf-nTd-isBIIcpJLRZ4xbUV4hzecQ9S3XksyKG_CuroYCVaGPnGI2WG"/>
+</div>
+<div class="aspect-square w-32 md:w-40 rounded-3xl overflow-hidden -rotate-3 -mt-4">
+<img class="w-full h-full object-cover" alt="Gallery image 3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBXajId9qQ4ZOHJ6OgO93lkiXw7H9oDf5kmY6MBasXg5AYvVpyJmZKT2urolNogEp7zK6qTRCA16l4Nk0KRN29KfTiaFX9GubnWrLR2cIkXxAGHI0kxLGuVruLf20gCRCn56CRbyGurctFOjnvZLZCyNbFARTh-5u3E7UP78y4VGzjyBX4aGh2S2A6in575yU0tBn95Z7i4ve1NYBhHRzyCnYTE-6sTpkNCjG4KCf_e8XQ4h-h-OnLESt31YPaO8prqwn29loCeGrV"/>
+</div>
+<div class="aspect-square w-32 md:w-40 rounded-3xl overflow-hidden rotate-12 mt-4">
+<img class="w-full h-full object-cover" alt="Gallery image 4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoPWqfOze16GzhvhSb11dEni7zoCgJi0SXbs3QH07gQiLJGEafPwX7Dk-CqgiP6ooHCKLriGfrJ1bwCqWdaP24bs6igpqSGoPHcmoRmMdjaZIjK7iA6weA3vvJnJNd-0Jr-g5RVYCZknQlVW2alhfBcSv_Z9Hs04UH4U4hseIVaijatHMyAKecrfgfLto8mewy-1X7qdQrgJWGHKQc4oavQOQ_LD9u9ldx8zXlDPruoJ1Yao_JLpSQyzUMPE-kPuNRYSgFZ_iekuml"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-outline-variant/10 bg-surface dark:bg-background">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-gutter py-stack-lg gap-stack-md">
+<div class="flex flex-col items-center md:items-start gap-2">
+<div class="font-headline-md text-headline-md font-bold text-primary opacity-80">OBOOK</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 OBOOK. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:bg-primary-container hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</a>
+</div>
+</div>
+</footer>
+
+<!-- Login Modal -->
+<div id="loginModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+<div class="bg-surface rounded-[32px] p-8 max-w-md w-full shadow-xl">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface">Welcome Back</h2>
+<button type="button" id="closeLoginModal" class="text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form id="loginForm" class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Email</label>
+<input type="email" id="loginEmail" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Enter your email" required/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-2">Password</label>
+<input type="password" id="loginPassword" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Enter your password" required/>
+</div>
+<button type="submit" class="w-full bg-primary-container text-on-primary-container font-label-sm text-label-sm px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md">Log In</button>
+<p id="loginError" class="text-error text-sm text-center hidden"></p>
+<p class="text-center text-sm text-on-surface-variant">Don't have an account? <a href="signup.html" class="text-primary font-semibold hover:underline">Sign up</a></p>
+</form>
+</div>
+</div>
+
+<script>
+    // Modal management with camelCase
+    const loginModal = document.getElementById('loginModal');
+    const showLoginModal = document.getElementById('showLoginModal');
+    const closeLoginModal = document.getElementById('closeLoginModal');
+    const heroLoginBtn = document.getElementById('heroLoginBtn');
+    const ctaLoginBtn = document.getElementById('ctaLoginBtn');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+
+    const openLoginModal = () => {
+        loginModal.classList.remove('hidden');
+        loginEmail.focus();
+    };
+
+    const closeModal = () => {
+        loginModal.classList.add('hidden');
+        loginForm.reset();
+        loginError.classList.add('hidden');
+    };
+
+    showLoginModal.addEventListener('click', openLoginModal);
+    heroLoginBtn.addEventListener('click', openLoginModal);
+    ctaLoginBtn.addEventListener('click', openLoginModal);
+    closeLoginModal.addEventListener('click', closeModal);
+
+    loginModal.addEventListener('click', (event) => {
+        if (event.target === loginModal) {
+            closeModal();
+        }
+    });
+
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        loginError.classList.add('hidden');
+
+        const payload = {
+            email: loginEmail.value.trim(),
+            password: loginPassword.value
+        };
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                loginError.textContent = result.error || 'Invalid email or password';
+                loginError.classList.remove('hidden');
+                return;
+            }
+
+            window.location.href = result.redirect || '/feed.html';
+        } catch (error) {
+            loginError.textContent = 'Unable to log in right now.';
+            loginError.classList.remove('hidden');
+        }
+    });
+
+    // Button micro-interactions
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+            btn.style.transform = 'scale(0.95)';
+        });
+        btn.addEventListener('mouseup', () => {
+            btn.style.transform = 'scale(1)';
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'scale(1)';
+        });
+    });
+</script>
 </body>
 </html>

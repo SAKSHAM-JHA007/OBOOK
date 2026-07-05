@@ -1,37 +1,74 @@
-const signupForm = document.getElementById("signup-form");
-const feedback = document.getElementById("feedback");
+// signupFormHandlingWithCamelcaseConventions
+const signupFormElement = document.getElementById("signupForm");
+const feedbackElement = document.getElementById("signupError");
 
-signupForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+if (signupFormElement) {
+    signupFormElement.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-    const formData = {
-        username: document.getElementById("username").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value,
-        confirmPassword: document.getElementById("confirmPassword").value,
-    };
+        const signupUsername = document.getElementById("signupUsername");
+        const signupEmail = document.getElementById("signupEmail");
+        const signupPassword = document.getElementById("signupPassword");
+        const signupConfirmPassword = document.getElementById("signupConfirmPassword");
 
-    try {
-        const response = await fetch("/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            feedback.textContent = result.error || "Signup failed.";
-            feedback.classList.remove("success");
+        // Validation checks
+        if (!signupUsername || !signupEmail || !signupPassword || !signupConfirmPassword) {
+            if (feedbackElement) {
+                feedbackElement.textContent = "Missing form fields.";
+                feedbackElement.classList.remove("hidden");
+            }
             return;
         }
 
-        window.location.href = result.redirect || "/thankyou.html";
-    } catch (error) {
-        feedback.textContent = "Signup failed. Please try again.";
-        feedback.classList.remove("success");
-        console.error("Signup error:", error);
-    }
-});
+        if (signupPassword.value !== signupConfirmPassword.value) {
+            if (feedbackElement) {
+                feedbackElement.textContent = "Passwords do not match.";
+                feedbackElement.classList.remove("hidden");
+            }
+            return;
+        }
+
+        if (signupPassword.value.length < 8) {
+            if (feedbackElement) {
+                feedbackElement.textContent = "Password must be at least 8 characters.";
+                feedbackElement.classList.remove("hidden");
+            }
+            return;
+        }
+
+        const formPayload = {
+            username: signupUsername.value.trim(),
+            email: signupEmail.value.trim(),
+            password: signupPassword.value,
+            confirmPassword: signupConfirmPassword.value
+        };
+
+        try {
+            const response = await fetch("/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formPayload),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                if (feedbackElement) {
+                    feedbackElement.textContent = result.error || "Signup failed.";
+                    feedbackElement.classList.remove("hidden");
+                }
+                return;
+            }
+
+            window.location.href = result.redirect || "/thankyou.html";
+        } catch (error) {
+            if (feedbackElement) {
+                feedbackElement.textContent = "Signup failed. Please try again.";
+                feedbackElement.classList.remove("hidden");
+            }
+            console.error("Signup error:", error);
+        }
+    });
+}

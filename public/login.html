@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Sign Up - OBOOK</title>
+    <title>Login - OBOOK</title>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
@@ -102,11 +102,6 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .glassCard {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
     </style>
 </head>
 <body class="bg-background text-on-surface font-body-md">
@@ -116,76 +111,44 @@
 <a class="font-headline-md text-headline-md font-bold text-primary tracking-tight" href="index.html">OBOOK</a>
 <div class="flex items-center gap-stack-md">
 <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200 px-4 py-2 rounded-xl" href="index.html">Home</a>
-<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200 px-4 py-2 rounded-xl" href="index.html#login">Login</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors duration-200 px-4 py-2 rounded-xl" href="signup.html">Sign Up</a>
 </div>
 </div>
 </nav>
 
-<main class="pt-24 pb-16">
-<div class="max-w-md mx-auto px-margin-mobile">
+<main class="pt-24 pb-16 min-h-screen flex items-center justify-center">
+<div class="max-w-md mx-auto px-margin-mobile w-full">
 <!-- Form Card -->
 <div class="bg-surface rounded-[32px] p-8 shadow-lg">
 <div class="mb-8">
-<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-3">Create your account</h1>
-<p class="font-body-md text-body-md text-on-surface-variant">Join OBOOK and start sharing your world with friends.</p>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-3">Welcome Back</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Log in to your OBOOK account and continue sharing.</p>
 </div>
 
-<form id="signupForm" class="space-y-4">
-<div>
-<label class="block font-label-sm text-label-sm text-on-surface mb-2">Username</label>
-<input type="text" id="signupUsername" name="username" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Choose a username" required/>
-</div>
-
+<form id="loginForm" class="space-y-4">
 <div>
 <label class="block font-label-sm text-label-sm text-on-surface mb-2">Email</label>
-<input type="email" id="signupEmail" name="email" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Enter your email" required/>
+<input type="email" id="loginEmail" name="email" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Enter your email" required/>
 </div>
 
 <div>
 <label class="block font-label-sm text-label-sm text-on-surface mb-2">Password</label>
-<input type="password" id="signupPassword" name="password" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Create a password" required/>
+<input type="password" id="loginPassword" name="password" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Enter your password" required/>
 </div>
 
-<div>
-<label class="block font-label-sm text-label-sm text-on-surface mb-2">Confirm Password</label>
-<input type="password" id="signupConfirmPassword" name="confirmPassword" class="w-full px-4 py-3 rounded-xl border border-outline-variant text-on-surface placeholder-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" placeholder="Confirm your password" required/>
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-2 cursor-pointer">
+<input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-outline-variant text-primary"/>
+<span class="font-body-md text-body-md text-on-surface-variant">Remember me</span>
+</label>
+<a href="#" class="font-label-sm text-label-sm text-primary hover:underline">Forgot password?</a>
 </div>
 
-<div class="flex items-start gap-3 pt-2">
-<input type="checkbox" id="agreeTerms" class="w-4 h-4 rounded border-outline-variant text-primary cursor-pointer" required/>
-<label for="agreeTerms" class="font-body-md text-body-md text-on-surface-variant cursor-pointer">I agree to the <a href="#" class="text-primary hover:underline">Terms of Service</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a></label>
-</div>
+<button type="submit" class="w-full bg-primary-container text-on-primary-container font-label-sm text-label-sm px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md mt-6">Log In</button>
 
-<button type="submit" class="w-full bg-primary-container text-on-primary-container font-label-sm text-label-sm px-6 py-3 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md mt-6">Create Account</button>
-
-<p id="signupError" class="text-error text-sm text-center hidden"></p>
-<p class="text-center text-sm text-on-surface-variant">Already have an account? <a href="index.html" class="text-primary font-semibold hover:underline">Log in</a></p>
+<p id="loginError" class="text-error text-sm text-center hidden"></p>
+<p class="text-center text-sm text-on-surface-variant">Don't have an account? <a href="signup.html" class="text-primary font-semibold hover:underline">Sign up</a></p>
 </form>
-</div>
-
-<!-- Features highlight -->
-<div class="max-w-md mx-auto px-margin-mobile mt-12 space-y-4">
-<div class="flex gap-3">
-<span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
-<div>
-<h3 class="font-label-sm text-label-sm text-on-surface mb-1">Fast & Simple</h3>
-<p class="font-body-md text-body-md text-on-surface-variant text-sm">Sign up in seconds and start sharing</p>
-</div>
-</div>
-<div class="flex gap-3">
-<span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
-<div>
-<h3 class="font-label-sm text-label-sm text-on-surface mb-1">Secure</h3>
-<p class="font-body-md text-body-md text-on-surface-variant text-sm">Your data is protected with industry standards</p>
-</div>
-</div>
-<div class="flex gap-3">
-<span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
-<div>
-<h3 class="font-label-sm text-label-sm text-on-surface mb-1">Private</h3>
-<p class="font-body-md text-body-md text-on-surface-variant text-sm">Control who sees your content</p>
-</div>
-</div>
 </div>
 </div>
 </main>
@@ -206,39 +169,37 @@
 </footer>
 
 <script>
-    const signupForm = document.getElementById('signupForm');
-    const signupError = document.getElementById('signupError');
-    const signupUsername = document.getElementById('signupUsername');
-    const signupEmail = document.getElementById('signupEmail');
-    const signupPassword = document.getElementById('signupPassword');
-    const signupConfirmPassword = document.getElementById('signupConfirmPassword');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const rememberMe = document.getElementById('rememberMe');
 
-    signupForm.addEventListener('submit', async (event) => {
+    // Restore email if user had it saved
+    const savedEmail = localStorage.getItem('obookSavedEmail');
+    if (savedEmail) {
+        loginEmail.value = savedEmail;
+        rememberMe.checked = true;
+    }
+
+    loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        signupError.classList.add('hidden');
+        loginError.classList.add('hidden');
 
-        // Validation
-        if (signupPassword.value !== signupConfirmPassword.value) {
-            signupError.textContent = 'Passwords do not match';
-            signupError.classList.remove('hidden');
-            return;
-        }
-
-        if (signupPassword.value.length < 8) {
-            signupError.textContent = 'Password must be at least 8 characters';
-            signupError.classList.remove('hidden');
-            return;
+        // Save email if remember me is checked
+        if (rememberMe.checked) {
+            localStorage.setItem('obookSavedEmail', loginEmail.value);
+        } else {
+            localStorage.removeItem('obookSavedEmail');
         }
 
         const payload = {
-            username: signupUsername.value.trim(),
-            email: signupEmail.value.trim(),
-            password: signupPassword.value,
-            confirmPassword: signupConfirmPassword.value
+            email: loginEmail.value.trim(),
+            password: loginPassword.value
         };
 
         try {
-            const response = await fetch('/signup', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -246,15 +207,15 @@
 
             const result = await response.json();
             if (!response.ok) {
-                signupError.textContent = result.error || 'Signup failed. Please try again.';
-                signupError.classList.remove('hidden');
+                loginError.textContent = result.error || 'Invalid email or password';
+                loginError.classList.remove('hidden');
                 return;
             }
 
-            window.location.href = result.redirect || '/thankyou.html';
+            window.location.href = result.redirect || '/feed.html';
         } catch (error) {
-            signupError.textContent = 'Unable to create account right now.';
-            signupError.classList.remove('hidden');
+            loginError.textContent = 'Unable to log in right now.';
+            loginError.classList.remove('hidden');
         }
     });
 

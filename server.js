@@ -248,6 +248,94 @@ app.get("/oes", (req, res, next) => {
     );
 });
 
+// Logout endpoint
+app.post("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: "Failed to logout." });
+        }
+        res.clearCookie("connect.sid");
+        return res.json({ success: true, message: "Logged out successfully." });
+    });
+});
+
+// API Posts Endpoints
+app.post("/api/posts", (req, res, next) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: "Please log in to create a post." });
+    }
+
+    const content = (req.body.content || "").trim();
+    const mediaUrls = req.body.mediaUrls || null;
+
+    if (!content) {
+        return res.status(400).json({ error: "Post content is required." });
+    }
+
+    db.run("INSERT INTO oes (user_id, text_content, image_path) VALUES (?, ?, ?)", [req.session.userId, content, mediaUrls ? mediaUrls[0] : null], function (insertErr) {
+        if (insertErr) {
+            return next(insertErr);
+        }
+
+        db.get(
+            `SELECT oes.id as postId, oes.user_id as userId, oes.text_content as content, 
+                    oes.image_path as imageUrls, oes.created_at as createdAt, 
+                    users.username, 0 as likeCount, 0 as commentCount, 0 as shareCount
+             FROM oes 
+             LEFT JOIN users ON users.id = oes.user_id 
+             WHERE oes.id = ?`,
+            [this.lastID],
+            (selectErr, post) => {
+                if (selectErr) {
+                    return next(selectErr);
+                }
+
+                return res.status(201).json({ success: true, post });
+            }
+        );
+    });
+});
+
+app.get("/api/posts", (req, res, next) => {
+    const limit = parseInt(req.query.limit, 10) || 20;
+
+    db.all(
+        `SELECT oes.id as postId, oes.user_id as userId, oes.text_content as content, 
+                oes.image_path as imageUrls, oes.created_at as createdAt, 
+                users.username, 0 as likeCount, 0 as commentCount, 0 as shareCount
+         FROM oes
+         LEFT JOIN users ON users.id = oes.user_id
+         ORDER BY oes.created_at DESC
+         LIMIT ?`,
+        [Math.min(limit, 100)],
+        (err, rows) => {
+            if (err) {
+                return next(err);
+            }
+
+            return res.json(rows || []);
+        }
+    );
+});
+
+app.post("/api/posts/:postId/like", (req, res, next) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: "Please log in to like a post." });
+    }
+
+    // For now, just return success (can implement like table later)
+    return res.json({ success: true, message: "Post liked." });
+});
+
+app.post("/api/posts/:postId/bookmark", (req, res, next) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ error: "Please log in to bookmark a post." });
+    }
+
+    // For now, just return success (can implement bookmarks table later)
+    return res.json({ success: true, message: "Post bookmarked." });
+});
+
 app.use((req, res, next) => {
     const error = new Error("Not found");
     error.status = 404;

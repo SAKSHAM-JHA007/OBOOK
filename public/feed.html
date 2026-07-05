@@ -1,43 +1,361 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="scroll-smooth" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBOOK Feed</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Feed - OBOOK</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#1a1a1a",
+                        "primary-container": "#ff8c00",
+                        "on-primary-container": "#ffffff",
+                        "secondary": "#ff9500",
+                        "secondary-light": "#ffb347",
+                        "on-surface": "#1a1a1a",
+                        "on-surface-variant": "#6b6b6b",
+                        "outline-variant": "#e0e0e0",
+                        "surface": "#ffffff",
+                        "surface-variant": "#f5f5f5",
+                        "error": "#dc2626",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "600px",
+                        "stack-lg": "24px",
+                        "gutter": "16px",
+                        "margin-mobile": "16px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glassCard {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .ambientShadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .ambientShadowHover:hover {
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.12);
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
-<body>
-    <header class="topbar">
-        <a class="brand" href="index.html">
-            <img class="brand-logo" src="logo.svg" alt="OBOOK logo">
-            <div>
-                <div class="brand-name">OBOOK</div>
-                <div class="brand-tag">CONNECT. SHARE. INSPIRE.</div>
-            </div>
-        </a>
-        <div class="topbar-actions">
-            <a class="ghost-btn" href="index.html">Home</a>
-            <a class="primary-btn" href="index.html">Log in</a>
-        </div>
-    </header>
+<body class="bg-surface-variant text-on-surface font-body-md">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/95 backdrop-blur-md shadow-sm border-b border-outline-variant">
+<div class="max-w-container-max mx-auto px-margin-mobile h-16 flex justify-between items-center">
+<a class="font-headline-md text-headline-md font-bold text-primary tracking-tight" href="feed.html">OBOOK</a>
+<div class="flex items-center gap-stack-md">
+<button id="notificationBtn" class="relative text-on-surface hover:text-primary-container transition-colors" type="button">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button id="profileBtn" class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-semibold hover:opacity-90 transition-opacity" type="button">U</button>
+<button id="logoutBtn" class="font-label-sm text-label-sm text-on-surface-variant hover:text-error transition-colors" type="button">Logout</button>
+</div>
+</div>
+</nav>
 
-    <main class="feed-shell">
-        <section class="composer card">
-            <div class="composer-top">
-                <div class="avatar">O</div>
-                <textarea id="oe-text" maxlength="280" placeholder="Write your next Oe..."></textarea>
-            </div>
-            <div class="composer-actions">
-                <label class="upload-btn" for="oe-image">📷 Add photo</label>
-                <input id="oe-image" type="file" accept="image/png,image/jpeg,image/webp">
-                <button id="post-btn" class="primary-btn">Post</button>
-            </div>
-            <p id="composer-error" class="form-error"></p>
-        </section>
+<main class="pt-20 pb-20">
+<div class="max-w-container-max mx-auto px-margin-mobile space-y-stack-lg">
 
-        <section id="feed" class="feed-list"></section>
-    </main>
+<!-- Composer Section -->
+<div class="glassCard ambientShadow rounded-[16px] p-6 sticky top-20">
+<div class="flex gap-stack-md">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-semibold flex-shrink-0">U</div>
+<div class="flex-1">
+<div class="space-y-3">
+<textarea id="postTextarea" class="w-full p-4 rounded-xl border border-outline-variant bg-surface text-on-surface placeholder-on-surface-variant resize-none focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-secondary/20" placeholder="Share your thoughts or Oes with OBOOK..." rows="3"></textarea>
+<div class="flex items-center justify-between">
+<div class="flex gap-2">
+<button id="imageUploadBtn" class="p-2 hover:bg-surface-variant rounded-lg transition-colors" type="button" title="Add image">
+<span class="material-symbols-outlined text-primary-container">image</span>
+</button>
+<button id="emojiBtn" class="p-2 hover:bg-surface-variant rounded-lg transition-colors" type="button" title="Add emoji">
+<span class="material-symbols-outlined text-primary-container">sentiment_very_satisfied</span>
+</button>
+</div>
+<button id="submitPostBtn" class="bg-primary-container text-on-primary-container font-label-sm text-label-sm px-6 py-2 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-md" type="button">Post</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-    <script src="feed.js"></script>
+<!-- Feed Posts -->
+<div id="feedContainer" class="space-y-stack-lg">
+<!-- Posts will be dynamically loaded here -->
+
+<!-- Sample Post 1 -->
+<div class="glassCard ambientShadow rounded-[16px] overflow-hidden">
+<!-- Post Header -->
+<div class="p-4 border-b border-outline-variant">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-stack-sm">
+<div class="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center font-semibold">J</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface font-semibold">Jordan Lee</div>
+<div class="text-xs text-on-surface-variant">@jordanlee • 2 hours ago</div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary-container" type="button">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+
+<!-- Post Content -->
+<div class="px-4 pt-3 pb-2">
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">Just finished an amazing hike at sunrise! The view was absolutely incredible. 🏔️ Nothing beats connecting with nature and sharing these moments with friends.</p>
+</div>
+
+<!-- Post Image -->
+<div class="mt-3 mx-4 rounded-xl overflow-hidden aspect-video bg-surface-variant">
+<img class="w-full h-full object-cover" alt="Sunrise hike view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzrTx6PFkmXpQUnJQDbNFv716bpodB8sBL1ls7_3UqTJ8jvxJ80eqVbM2LZsiG_7PfCSjP-wuqSadXZLKbaNq3RqEtwXY1jMpyRftoR2la6Z1P2reIeC8e398Pi4cT1e1X7G_E38kQcuJTaJu6hPf1j9DlIehva1hTzAPTG189YiF7RRgsDOkHSdG8Ew-mATKaH2iecJaZrLmc9qZKNLAT7ks38_YxJGB0U3RlDYcmBtTdYaG_UbkZrMFeme56v7LgGDoQk8z-4ZEo"/>
+</div>
+
+<!-- Post Actions -->
+<div class="px-4 py-3 border-t border-outline-variant flex items-center justify-between text-on-surface-variant">
+<button class="flex items-center gap-2 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">favorite</span>
+<span class="text-sm">234</span>
+</button>
+<button class="flex items-center gap-2 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+<span class="text-sm">18</span>
+</button>
+<button class="flex items-center gap-2 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">share</span>
+<span class="text-sm">42</span>
+</button>
+<button class="flex items-center gap-2 hover:text-secondary ml-auto" type="button">
+<span class="material-symbols-outlined text-lg">bookmark</span>
+</button>
+</div>
+</div>
+
+<!-- Sample Post 2 -->
+<div class="glassCard ambientShadow rounded-[16px] overflow-hidden">
+<!-- Post Header -->
+<div class="p-4 border-b border-outline-variant">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-stack-sm">
+<div class="w-12 h-12 rounded-full bg-secondary-light text-white flex items-center justify-center font-semibold">S</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface font-semibold">Sarah Chen</div>
+<div class="text-xs text-on-surface-variant">@sarahchen • 4 hours ago</div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary-container" type="button">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+</div>
+
+<!-- Post Content -->
+<div class="px-4 pt-3 pb-2">
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">Coffee tastes better when you're sharing it with people who get you. ☕ Found this cozy café downtown and it's become my new favorite spot!</p>
+</div>
+
+<!-- Post Actions -->
+<div class="px-4 py-3 border-t border-outline-variant flex items-center justify-between text-on-surface-variant">
+<button class="flex items-center gap-2 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">favorite</span>
+<span class="text-sm">567</span>
+</button>
+<button class="flex items-center gap-2 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+<span class="text-sm">34</span>
+</button>
+<button class="flex items-center gap-2 hover:text-secondary transition-colors" type="button">
+<span class="material-symbols-outlined text-lg">share</span>
+<span class="text-sm">78</span>
+</button>
+<button class="flex items-center gap-2 hover:text-secondary ml-auto" type="button">
+<span class="material-symbols-outlined text-lg">bookmark</span>
+</button>
+</div>
+</div>
+
+</div>
+
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full bg-surface border-t border-outline-variant">
+<div class="max-w-container-max mx-auto px-margin-mobile py-4 flex justify-around md:justify-center md:gap-12">
+<a class="flex flex-col items-center gap-1 hover:text-primary-container transition-colors" href="feed.html">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs md:hidden">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-xs md:hidden">Search</span>
+</a>
+<a class="flex flex-col items-center gap-1 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-xs md:hidden">Create</span>
+</a>
+<a class="flex flex-col items-center gap-1 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-xs md:hidden">Saved</span>
+</a>
+<a class="flex flex-col items-center gap-1 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs md:hidden">Profile</span>
+</a>
+</div>
+</footer>
+
+<script>
+    // Feed page script with camelCase conventions
+    const postTextarea = document.getElementById('postTextarea');
+    const submitPostBtn = document.getElementById('submitPostBtn');
+    const imageUploadBtn = document.getElementById('imageUploadBtn');
+    const emojiBtn = document.getElementById('emojiBtn');
+    const feedContainer = document.getElementById('feedContainer');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const profileBtn = document.getElementById('profileBtn');
+    const notificationBtn = document.getElementById('notificationBtn');
+
+    // Submit post handler
+    submitPostBtn.addEventListener('click', async () => {
+        const postText = postTextarea.value.trim();
+
+        if (!postText) {
+            alert('Please write something to post');
+            return;
+        }
+
+        const postPayload = {
+            content: postText,
+            timestamp: new Date().toISOString(),
+            mediaUrls: []
+        };
+
+        try {
+            const response = await fetch('/api/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(postPayload)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to post');
+            }
+
+            const result = await response.json();
+            postTextarea.value = '';
+            
+            // Add new post to feed
+            loadFeed();
+        } catch (error) {
+            console.error('Post submission error:', error);
+            alert('Failed to post. Please try again.');
+        }
+    });
+
+    // Load feed posts
+    const loadFeed = async () => {
+        try {
+            const response = await fetch('/api/posts');
+            if (!response.ok) {
+                throw new Error('Failed to load feed');
+            }
+            
+            const posts = await response.json();
+            // Feed container will be populated by backend or kept with sample data
+        } catch (error) {
+            console.error('Feed load error:', error);
+        }
+    };
+
+    // Image upload handler
+    imageUploadBtn.addEventListener('click', () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                console.log('Image selected:', file.name);
+                // Handle image upload to backend
+            }
+        });
+        fileInput.click();
+    });
+
+    // Logout handler
+    logoutBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to logout?')) {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/index.html';
+                })
+                .catch(error => console.error('Logout error:', error));
+        }
+    });
+
+    // Auto-expand textarea
+    postTextarea.addEventListener('input', () => {
+        postTextarea.style.height = 'auto';
+        postTextarea.style.height = (postTextarea.scrollHeight) + 'px';
+    });
+
+    // Button micro-interactions
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('mousedown', () => {
+            btn.style.transform = 'scale(0.95)';
+        });
+        btn.addEventListener('mouseup', () => {
+            btn.style.transform = 'scale(1)';
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'scale(1)';
+        });
+    });
+
+    // Initialize feed on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFeed();
+    });
+</script>
 </body>
 </html>
