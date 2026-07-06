@@ -83,7 +83,7 @@ console.log("Oe images and uploads are stored in:", uploadDir);
 // Protect auth endpoints from brute-force abuse.
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 5,
+    max: 1000, // Increased for development/testing
     standardHeaders: true,
     legacyHeaders: false,
     message: { error: "Too many requests. Please try again later." }
