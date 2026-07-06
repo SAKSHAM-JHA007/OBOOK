@@ -272,7 +272,7 @@ app.post("/api/posts", (req, res, next) => {
         return res.status(400).json({ error: "Post content is required." });
     }
 
-    db.run("INSERT INTO oes (user_id, text_content, image_path) VALUES (?, ?, ?)", [req.session.userId, content, mediaUrls ? mediaUrls[0] : null], function (insertErr) {
+    db.run("INSERT INTO oes (user_id, text_content, image_path) VALUES (?, ?, ?)", [req.session.userId, content, (mediaUrls && mediaUrls.length > 0) ? mediaUrls[0] : null], function (insertErr) {
         if (insertErr) {
             return next(insertErr);
         }

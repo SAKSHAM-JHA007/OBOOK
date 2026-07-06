@@ -102,14 +102,30 @@ const loadFeed = async () => {
         }
         
         const posts = await response.json();
+        
+        // Clear container
+        feedContainer.innerHTML = '';
+
         if (posts && posts.length > 0) {
-            // Clear sample posts and load real ones
-            const samplePosts = feedContainer.querySelectorAll('.glassCard');
-            // Keep sample posts as fallback
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                feedContainer.appendChild(postElement);
+            });
+        } else {
+            feedContainer.innerHTML = `
+                <div class="text-center p-8 text-on-surface-variant">
+                    <span class="material-symbols-outlined text-4xl mb-2 opacity-50">post_add</span>
+                    <p>No posts yet. Be the first to share something!</p>
+                </div>
+            `;
         }
     } catch (error) {
         console.error('Feed load error:', error);
-        // Keep sample posts visible as fallback
+        feedContainer.innerHTML = `
+            <div class="text-center p-8 text-error">
+                <p>Unable to load posts right now. Please try again later.</p>
+            </div>
+        `;
     }
 };
 
@@ -142,9 +158,8 @@ const handleSubmitPost = async () => {
         const result = await response.json();
         postTextarea.value = '';
         
-        // Add new post to the top of feed
-        const newPostElement = createPostElement(result.post);
-        feedContainer.insertBefore(newPostElement, feedContainer.firstChild);
+        // Reload feed to get fresh data and clear empty state if needed
+        loadFeed();
     } catch (error) {
         console.error('Post submission error:', error);
         alert('Failed to post. Please try again.');
